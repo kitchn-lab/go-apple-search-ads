@@ -4,24 +4,21 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 
 	"github.com/kitchn-lab/go-apple-search-ads/searchads"
 )
 
 func main() {
-	pemdat, _ := ioutil.ReadFile("../api-keys.pem")
-	keydat, _ := ioutil.ReadFile("../api-keys.key")
-	client, err := searchads.NewClient(nil, pemdat, keydat, nil)
+	client, err := searchads.NewClient(nil, []byte("this is invalid"), []byte("this is invalid"), nil)
 	if err != nil {
 		log.Fatalf("Client error: %s", err)
 		panic(err)
 	}
 	opt := searchads.ListOptions{Limit: 1000, Offset: 0}
-	list, rs, err := client.Campaign.List(context.Background(), &opt)
+	list, rs, err := client.ACL.List(context.Background(), &opt)
 	if err != nil {
-		log.Fatalf("Campaign List error: %s", err)
+		log.Fatalf("ACL List error: %s", err)
 		panic(err)
 	}
 	res, _ := json.Marshal(&list)
